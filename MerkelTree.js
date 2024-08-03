@@ -25,4 +25,42 @@ class MerkleTree {
 
     return this.computeRoot(nextLayer);
   }
+
+  getproof(index) {
+    let proof = [];
+    this.buildProof(index, proof, this.leaves);
+    return proof;
+  }
+
+  buildProof(index, proof, currentLayer) {
+    if (currentLayer.length === 1) {
+      return;
+    }
+
+    let nextLayer = [];
+    for (let i = 0; i < currentLayer.length; i += 2) {
+      if (i + 1 < currentLayer.length) {
+        let leftNode = currentLayer[i];
+        let rightNode = currentLayer[i + 1];
+        let isPresent = index >= i && index <= i + 1;
+
+        if (isPresent) {
+          if (index == i) {
+            proof.push({ data: rightNode, left: false });
+          } else {
+            proof.push({ data: leftNode, left: true });
+          }
+          nextLayer.push(this.concat(leftNode, rightNode));
+        } else {
+          nextLayer.push(this.concat(leftNode, rightNode));
+        }
+      } else {
+        nextLayer.push(currentLayer[i]);
+      }
+    }
+
+    return this.buildProof(Math.floor(index / 2), proof, nextLayer);
+  }
 }
+
+module.exports = MerkleTree;
