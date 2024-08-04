@@ -11,7 +11,7 @@ const tree = new MerkleTree(leaves, simpleConcat);
 const root = tree.getRoot();
 console.log(root);
 
-const index = 3;
+const index = 2;
 const proof = tree.getproof(index);
 console.log("Proof for leaf at index", index, ":", proof);
 
